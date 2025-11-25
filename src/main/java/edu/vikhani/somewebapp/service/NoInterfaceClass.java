@@ -7,4 +7,7 @@ public class NoInterfaceClass {
     public void doSomething() {
         log.debug("Doing something");
     }
+
+    public void doesNothingSomething() {
+    }
 }
