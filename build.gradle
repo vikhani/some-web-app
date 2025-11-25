@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
     id 'checkstyle'
     id "org.sonarqube" version "6.3.1.5724"
+    id 'jacoco'
 }
 
 group = 'edu.vikhani'
@@ -40,6 +41,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // Generate JaCoCo report after tests
 }
 
 checkstyle {
@@ -60,3 +62,30 @@ tasks.withType(Checkstyle).configureEach {
         html.outputLocation = layout.buildDirectory.file("reports/checkstyle/checkstyle.html")
     }
 }
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/test/html")
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            limit {
+//                minimum = 0.8
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
