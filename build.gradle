@@ -57,9 +57,17 @@ checkstyle {
 
 tasks.withType(Checkstyle).configureEach {
     reports {
-        xml.required = false
+        xml.required = true
         html.required = true
         html.outputLocation = layout.buildDirectory.file("reports/checkstyle/checkstyle.html")
+        xml.outputLocation = layout.buildDirectory.file("reports/checkstyle/checkstyle.xml")
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.java.checkstyle.reportPaths",
+                "${buildDir}/reports/checkstyle/checkstyle.xml"
     }
 }
 
